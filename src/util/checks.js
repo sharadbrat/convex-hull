@@ -2,7 +2,7 @@ const EmptyArgumentError = require('./error').EmptyArgumentError;
 const NotIterableArgumentError = require('./error').NotIterableArgumentError;
 const PointsModeCantBeDeterminedError = require('./error').PointsModeCantBeDeterminedError;
 const ArgumentSizeError = require('./error').ArgumentSizeError;
-const POINTS_MODE = require('./points-mode');
+const POINTS_MODE = require('./interface').POINTS_MODE;
 
 /**
  * Checks if given argument is in correct format. Throws corresponding error, if argument is incorrect in any meaning.
@@ -51,7 +51,7 @@ function determinePointsMode(points) {
  * @returns {boolean}
  */
 function isIterable(value) {
-  return typeof value[Symbol.iterator] === 'function';
+  return value && typeof value[Symbol.iterator] === 'function';
 }
 
 /**
@@ -96,5 +96,11 @@ function getLengthOfIterable(iterable) {
   return Array.from(iterable).length;
 }
 
-module.exports.determinePointsMode = determinePointsMode;
-module.exports.checkArgumentCorrect = checkArgumentCorrect;
+module.exports = {
+  getLengthOfIterable,
+  detectPointMode,
+  detectPointsMode,
+  determinePointsMode,
+  checkArgumentCorrect,
+  isIterable
+};

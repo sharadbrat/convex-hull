@@ -1,4 +1,4 @@
-const POINTS_MODE = require('./points-mode');
+const POINTS_MODE = require('./interface');
 
 const ModeCastError = require('./error').ModeCastError;
 
