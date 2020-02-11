@@ -1,44 +1,48 @@
-const helper = require('../helper');
+const { getOrientation, ORIENTATION } = require('../helper');
 
-const facade = helper.algorithmArgumentFacade;
-const orientation = helper.orientation;
-const ORIENTATION = helper.ORIENTATION;
 
 /**
  * Returns leftmost point in points array.
- * @param points {Array<{x: number, y: number}>}
- * @returns {{x: number, y: number}}
+ * @function findLeftMost
+ * @param points {{x: number, y: number}[]}
+ * @return {{x: number, y: number}}
  */
 function findLeftMost(points) {
   return points.reduce((curr, next) => next.x < curr.x ? next : curr, points[0]);
 }
 
+
 /**
  * Returns true, if orientation of ordered triplet (p, q, r) is counterclockwise.
+ * @function isOrientationCounterclockwise
  * @param p {{x: number, y: number}}
  * @param q {{x: number, y: number}}
  * @param r {{x: number, y: number}}
- * @returns {boolean}
+ * @return {boolean}
  */
 function isOrientationCounterclockwise(p, q, r) {
-  return orientation(p, q, r) === ORIENTATION.COUNTERCLOCKWISE;
+  return getOrientation(p, q, r) === ORIENTATION.COUNTERCLOCKWISE;
 }
+
 
 /**
  * Returns initial iteration point.
- * @param points {Array<{x: number, y: number}>}
- * @param currentPoint {{x: number, y: number}}
- * @returns {{x: number, y: number}}
+ * @function getIterationPoint
+ * @param {{x: number, y: number}[]} points
+ * @param {{x: number, y: number}} currentPoint
+ * @return {{x: number, y: number}}
  */
 function getInitialIterationPoint(points, currentPoint) {
   return points[(points.indexOf(currentPoint) + 1) % points.length];
 }
 
+
 /**
  * Returns returns next point for iteration.
- * @param points {Array<{x: number, y: number}>}
- * @param currentPoint {{x: number, y: number}}
- * @returns {{x: number, y: number}}
+ * @function getIterationPoint
+ * @param {{x: number, y: number}[]} points
+ * @param {{x: number, y: number}} currentPoint
+ * @return {{x: number, y: number}}
  */
 function getIterationPoint(points, currentPoint) {
   let iterationPoint = getInitialIterationPoint(points, currentPoint);
@@ -49,6 +53,7 @@ function getIterationPoint(points, currentPoint) {
   });
   return iterationPoint;
 }
+
 
 /**
  * Implements Jarvis's algorithm (gift wrapping algorithm).
@@ -64,11 +69,12 @@ function getIterationPoint(points, currentPoint) {
  * b) next[p] = q (Store q as next of p in the output convex hull).
  *
  * c) p = q (Set p as q for next iteration).
- * @param points {Points}
- * @returns {Array<{x: number, y: number}>}
+ * @function giftWrapping
+ * @param {{x: number, y: number}[]} points
+ * @return {{x: number, y: number}[]}
  */
 function giftWrapping(points) {
-  const leftMost = findLeftMost(points.values);
+  const leftMost = findLeftMost(points);
 
   let hull = [];
   let currentPoint = leftMost;
@@ -76,10 +82,10 @@ function giftWrapping(points) {
   do {
     hull.push(currentPoint);
 
-    currentPoint = getIterationPoint(points.values, currentPoint);
+    currentPoint = getIterationPoint(points, currentPoint);
   } while (currentPoint !== leftMost);
 
   return hull;
 }
 
-module.exports = facade(giftWrapping);
+module.exports = giftWrapping;

@@ -1,5 +1,5 @@
 /**
- * Error that occurs, when given argument to the algorithm is empty.
+ * Error that occurs, when given argument to the algorithms is empty.
  * @type {EmptyArgumentError}
  */
 class EmptyArgumentError extends Error {
@@ -19,7 +19,7 @@ class ArgumentSizeError extends Error {
 }
 
 /**
- * Error that occurs, when given argument to the algorithm is not iterable.
+ * Error that occurs, when given argument to the algorithms is not iterable.
  * @type {NotIterableArgumentError}
  */
 class NotIterableArgumentError extends Error {
@@ -29,7 +29,7 @@ class NotIterableArgumentError extends Error {
 }
 
 /**
- * Error that occurs, when {POINTS_MODE} of given argument to the algorithm can not be determined.
+ * Error that occurs, when {POINTS_MODE} of given argument to the algorithms can not be determined.
  * @type {PointsModeCantBeDeterminedError}
  */
 class PointsModeCantBeDeterminedError extends Error {

@@ -1,16 +1,16 @@
 {
   "name": "@sharadbrat/convex-hull",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Javascript library that implements different algorithms of minimal convex hull search",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocka"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sharadbrat/convex-hull.git"
   },
-  "author": "Georgii Sharadze",
+  "author": "sharadbrat",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sharadbrat/convex-hull/issues"

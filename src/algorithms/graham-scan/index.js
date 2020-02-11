@@ -1,9 +1,21 @@
 const PI = Math.PI;
-const isPointInHull = require('../helper').isPointInHull;
-const facade = require('../helper').algorithmArgumentFacade;
+
+
+/**
+ * Check if point is in hull already.
+ * @function isPointInHull
+ * @param {{x: number, y: number}} point
+ * @param {Object[]} hull
+ * @return {boolean}
+ */
+function isPointInHull(point, hull) {
+  return hull.some(el => el === point);
+}
+
 
 /**
  * Calculates polar angle of a point.
+ * @function polarAngle
  * @param {{x: number, y: number}} point
  * @return {number} Polar angle of a point.
  */
@@ -11,8 +23,10 @@ function polarAngle(point) {
   return Math.atan2(point.y, point.x) * (180.0 / PI);
 }
 
+
 /**
  * Calculates cos between lines AB and BC.
+ * @function calcCos
  * @param {{x: number, y: number}} a
  * @param {{x: number, y: number}} b
  * @param {{x: number, y: number}} c
@@ -30,16 +44,17 @@ function calcCos(a, b, c) {
   return -scalarProduct / module;
 }
 
+
 /**
  * Returns first point of convex hull.
  * The point will be the leftmost and bottommost point.
- * @param {Points} points
+ * @param {{x: number, y: number}[]} points
  * @returns {{x: number, y: number}}
  */
 function getFirstPoint(points) {
-  let first = points.values[0];
+  let first = points[0];
 
-  for (let point of points.values) {
+  for (let point of points) {
     if (point.x < first.x || (point.x === first.x && point.y < first.y)) {
       first = point;
     }
@@ -50,15 +65,16 @@ function getFirstPoint(points) {
 /**
  * Returns second point of convex hull.
  * The point will be the point with the minimal polar angle (except first point, that is already in hull)
- * @param {Points} points
+ * @function getSecondPoint
+ * @param {{x: number, y: number}[]} points
  * @param {{x: number, y: number}} first
  * @returns {{x: number, y: number}}
  */
 function getSecondPoint(points, first) {
-  let minAngle = 1000000;
+  let minAngle = Number.MAX_SAFE_INTEGER;
   let minAnglePoint;
 
-  for (let point of points.values) {
+  for (let point of points) {
 
     if (point === first)
       continue;
@@ -75,16 +91,17 @@ function getSecondPoint(points, first) {
 
 /**
  * Returns next point, that should be added to hull.
- * @param {Points} points
- * @param {Array} hull
+ * @function getNextHullPoint
+ * @param {{x: number, y: number}[]} points
+ * @param {{x: number, y: number}[]} hull
  * @returns {{x: number, y: number}}
  */
 function getNextHullPoint(points, hull) {
-  let minCos = 10000000;
+  let minCos = Number.MAX_SAFE_INTEGER;
   let minCosPoint;
   let size = hull.length;
 
-  for (let point of points.values) {
+  for (let point of points) {
 
     if (!(isPointInHull(point, hull) && point !== hull[0])) {
       const a = hull[size - 2];
@@ -101,8 +118,9 @@ function getNextHullPoint(points, hull) {
   return minCosPoint;
 }
 
+
 /**
- * Implements algorithm of graham scan and finds minimal convex hull.
+ * Implements algorithms of graham scan and finds minimal convex hull.
  *
  * Description of algorithm:
  *
@@ -117,7 +135,8 @@ function getNextHullPoint(points, hull) {
  * (a) If adding Pi to our convex hull results in making a “left turn”, add Pi to H
  * (b) If adding Pi to our convex hull results in making a “right turn”, remove elements from H until adding Pi makes a
  * left turn, then add Pi to H.
- * @param {Points} points
+ * @function grahamScan
+ * @param {{x: number, y: number}[]} points
  * @returns {Array}
  */
 function grahamScan(points) {
@@ -135,4 +154,5 @@ function grahamScan(points) {
   return hull.slice(0, hull.length - 1);
 }
 
-module.exports = facade(grahamScan);
+
+module.exports = grahamScan;
