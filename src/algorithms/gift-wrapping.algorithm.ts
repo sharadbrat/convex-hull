@@ -1,13 +1,14 @@
-const { getOrientation, ORIENTATION } = require('../helper');
+import { getOrientation, Orientation } from './helper';
+import { ConvexHullSearchPoint as Point } from "../index";
 
 
 /**
  * Returns leftmost point in points array.
  * @function findLeftMost
- * @param points {{x: number, y: number}[]}
- * @return {{x: number, y: number}}
+ * @param {ConvexHullSearchPoint[]} points
+ * @return {ConvexHullSearchPoint}
  */
-function findLeftMost(points) {
+function findLeftMost(points: Point[]): Point {
   return points.reduce((curr, next) => next.x < curr.x ? next : curr, points[0]);
 }
 
@@ -15,24 +16,24 @@ function findLeftMost(points) {
 /**
  * Returns true, if orientation of ordered triplet (p, q, r) is counterclockwise.
  * @function isOrientationCounterclockwise
- * @param p {{x: number, y: number}}
- * @param q {{x: number, y: number}}
- * @param r {{x: number, y: number}}
+ * @param {ConvexHullSearchPoint} p
+ * @param {ConvexHullSearchPoint} q
+ * @param {ConvexHullSearchPoint} r
  * @return {boolean}
  */
-function isOrientationCounterclockwise(p, q, r) {
-  return getOrientation(p, q, r) === ORIENTATION.COUNTERCLOCKWISE;
+function isOrientationCounterclockwise(p: Point, q: Point, r: Point): boolean {
+  return getOrientation(p, q, r) === Orientation.COUNTERCLOCKWISE;
 }
 
 
 /**
  * Returns initial iteration point.
  * @function getIterationPoint
- * @param {{x: number, y: number}[]} points
- * @param {{x: number, y: number}} currentPoint
- * @return {{x: number, y: number}}
+ * @param {ConvexHullSearchPoint[]} points
+ * @param {ConvexHullSearchPoint} currentPoint
+ * @return {ConvexHullSearchPoint}
  */
-function getInitialIterationPoint(points, currentPoint) {
+function getInitialIterationPoint(points: Point[], currentPoint: Point): Point {
   return points[(points.indexOf(currentPoint) + 1) % points.length];
 }
 
@@ -40,11 +41,11 @@ function getInitialIterationPoint(points, currentPoint) {
 /**
  * Returns returns next point for iteration.
  * @function getIterationPoint
- * @param {{x: number, y: number}[]} points
- * @param {{x: number, y: number}} currentPoint
- * @return {{x: number, y: number}}
+ * @param {ConvexHullSearchPoint[]} points
+ * @param {ConvexHullSearchPoint} currentPoint
+ * @return {ConvexHullSearchPoint}
  */
-function getIterationPoint(points, currentPoint) {
+function getIterationPoint(points: Point[], currentPoint: Point): Point {
   let iterationPoint = getInitialIterationPoint(points, currentPoint);
   points.forEach(point => {
     if (isOrientationCounterclockwise(currentPoint, point, iterationPoint)) {
@@ -73,7 +74,7 @@ function getIterationPoint(points, currentPoint) {
  * @param {{x: number, y: number}[]} points
  * @return {{x: number, y: number}[]}
  */
-function giftWrapping(points) {
+export default function giftWrapping(points: Point[]): Point[] {
   const leftMost = findLeftMost(points);
 
   let hull = [];
@@ -87,5 +88,3 @@ function giftWrapping(points) {
 
   return hull;
 }
-
-module.exports = giftWrapping;

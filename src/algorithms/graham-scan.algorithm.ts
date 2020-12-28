@@ -1,14 +1,16 @@
+import { ConvexHullSearchPoint as Point } from "../index";
+
 const PI = Math.PI;
 
 
 /**
  * Check if point is in hull already.
  * @function isPointInHull
- * @param {{x: number, y: number}} point
- * @param {Object[]} hull
+ * @param {ConvexHullSearchPoint} point
+ * @param {ConvexHullSearchPoint[]} hull
  * @return {boolean}
  */
-function isPointInHull(point, hull) {
+function isPointInHull(point: Point, hull: Point[]): boolean {
   return hull.some(el => el === point);
 }
 
@@ -16,10 +18,10 @@ function isPointInHull(point, hull) {
 /**
  * Calculates polar angle of a point.
  * @function polarAngle
- * @param {{x: number, y: number}} point
+ * @param {ConvexHullSearchPoint} point
  * @return {number} Polar angle of a point.
  */
-function polarAngle(point) {
+function polarAngle(point: Point): number {
   return Math.atan2(point.y, point.x) * (180.0 / PI);
 }
 
@@ -27,12 +29,12 @@ function polarAngle(point) {
 /**
  * Calculates cos between lines AB and BC.
  * @function calcCos
- * @param {{x: number, y: number}} a
- * @param {{x: number, y: number}} b
- * @param {{x: number, y: number}} c
+ * @param {ConvexHullSearchPoint} a
+ * @param {ConvexHullSearchPoint} b
+ * @param {ConvexHullSearchPoint} c
  * @return {number} Cosine between AB and BC lines.
  */
-function calcCos(a, b, c) {
+function calcCos(a: Point, b: Point, c: Point): number {
   const xAB = b.x - a.x;
   const yAB = b.y - a.y;
   const xBC = c.x - b.x;
@@ -48,10 +50,10 @@ function calcCos(a, b, c) {
 /**
  * Returns first point of convex hull.
  * The point will be the leftmost and bottommost point.
- * @param {{x: number, y: number}[]} points
- * @returns {{x: number, y: number}}
+ * @param {ConvexHullSearchPoint[]} points
+ * @returns {ConvexHullSearchPoint}
  */
-function getFirstPoint(points) {
+function getFirstPoint(points: Point[]): Point {
   let first = points[0];
 
   for (let point of points) {
@@ -66,12 +68,12 @@ function getFirstPoint(points) {
  * Returns second point of convex hull.
  * The point will be the point with the minimal polar angle (except first point, that is already in hull)
  * @function getSecondPoint
- * @param {{x: number, y: number}[]} points
- * @param {{x: number, y: number}} first
- * @returns {{x: number, y: number}}
+ * @param {ConvexHullSearchPoint[]} points
+ * @param {ConvexHullSearchPoint} first
+ * @returns {ConvexHullSearchPoint}
  */
-function getSecondPoint(points, first) {
-  let minAngle = Number.MAX_SAFE_INTEGER;
+function getSecondPoint(points: Point[], first: Point): Point {
+  let minAngle = Number.MAX_VALUE;
   let minAnglePoint;
 
   for (let point of points) {
@@ -92,12 +94,12 @@ function getSecondPoint(points, first) {
 /**
  * Returns next point, that should be added to hull.
  * @function getNextHullPoint
- * @param {{x: number, y: number}[]} points
- * @param {{x: number, y: number}[]} hull
- * @returns {{x: number, y: number}}
+ * @param {ConvexHullSearchPoint[]} points
+ * @param {ConvexHullSearchPoint[]} hull
+ * @returns {ConvexHullSearchPoint}
  */
-function getNextHullPoint(points, hull) {
-  let minCos = Number.MAX_SAFE_INTEGER;
+function getNextHullPoint(points: Point[], hull: Point[]): Point {
+  let minCos = Number.MAX_VALUE;
   let minCosPoint;
   let size = hull.length;
 
@@ -136,10 +138,10 @@ function getNextHullPoint(points, hull) {
  * (b) If adding Pi to our convex hull results in making a “right turn”, remove elements from H until adding Pi makes a
  * left turn, then add Pi to H.
  * @function grahamScan
- * @param {{x: number, y: number}[]} points
- * @returns {Array}
+ * @param {ConvexHullSearchPoint[]} points
+ * @returns {ConvexHullSearchPoint}
  */
-function grahamScan(points) {
+export default function grahamScan(points: Point[]): Point[] {
   let hull = [];
 
   const first = getFirstPoint(points);
@@ -153,6 +155,3 @@ function grahamScan(points) {
 
   return hull.slice(0, hull.length - 1);
 }
-
-
-module.exports = grahamScan;

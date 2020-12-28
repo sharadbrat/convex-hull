@@ -4,6 +4,7 @@ Work in progress 🚧
 
 TODOS:
 * Environment with es6 exports / imports
+* Typescript
 * Build system
 * Tests (use tests from the speech)
 * Documentation
